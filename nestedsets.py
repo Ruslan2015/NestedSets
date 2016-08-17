@@ -13,6 +13,7 @@ class NestedSets:
     @staticmethod
     def showtreetofile():
         print("Тест")
+        print("Вторая строчка")
 
 if __name__ == "__main__":
     ns = NestedSets()
