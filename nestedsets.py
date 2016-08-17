@@ -10,10 +10,12 @@ class NestedSets:
         self.ref = ''
         self.tree = []
 
-    @staticmethod
-    def showtreetofile():
-        print("Тест")
-        print("Вторая строчка")
+    def getfrombase(self):
+        self.tree = {"1,1,1,2": "ref1"}
+
+    def showtreetofile(self):
+        for node in self.tree:
+            print(node.key)
 
 if __name__ == "__main__":
     ns = NestedSets()
