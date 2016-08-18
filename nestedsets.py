@@ -11,8 +11,8 @@ class NestedSets:
         self.ref = ''
         self.tree = {}
 
-    def testtree(self):
-        # Ключ (rk, lk, level, id)
+    def readtesttree(self):
+        # Ключ в словарь записывается так - (rk, lk, level, id)
         # Читаем файл в словарь
         patternkey = re.compile('\(.*?\)')  # шаблон на все, что между скобок
         patternval = re.compile('".*?"')  # шаблон на все, что между кавычек
@@ -21,18 +21,29 @@ class NestedSets:
             val = patternval.search(line).group()  # получаем все, что между кавычек
             patterndig = re.compile('\d+,*')  # шаблон на числа с запятой сзади и без нее
             dig = patterndig.findall(key[1:-1])  # получаем все числа в строке
-            rk = int(dig[0][:-1])  # получаем левый ключ, удаляя запятую
-            lk = int(dig[1][:-1])  # получаем правый ключ, удаляя запятую
-            lev = int(dig[2][:-1])  # получаем уровень, удаляя запятую
-            nid = int(dig[3])  # получаем id (удалять запятую не надо - ее нет)
-            self.tree[(rk, lk, lev, nid)] = val[1:-1]
+            # получаем левый ключ, удаляя запятую, получаем правый ключ, удаляя запятую,
+            # получаем уровень, удаляя запятую, получаем id (удалять запятую не надо - ее нет)
+            self.tree[int(dig[0][:-1]), int(dig[1][:-1]), int(dig[2][:-1]), int(dig[3])] = val[1:-1]
 
-    def showtreetofile(self):
+    def displaytreetofile(self):
+        fd = open('files/displaytree', 'w')
+        item = """
+          +---+
+          |   |
+        +---+---+
+        |   |   |
+        +---+---+
+        |   |   |
+        +---+---+
+        """
         for node in sorted(self.tree.keys()):
-            print(node[2] * '.', node, ' - ', self.tree[node])
+            fstr = node[2] * '.' + str(node) + ' - ' + self.tree[node] + '\n'
+            fd.write(fstr)
+        fd.write(item)
+        fd.close()
 
 
 if __name__ == "__main__":
     ns = NestedSets()
-    ns.testtree()
-    ns.showtreetofile()
+    ns.readtesttree()
+    ns.displaytreetofile()
