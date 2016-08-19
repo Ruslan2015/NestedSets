@@ -27,20 +27,38 @@ class NestedSets:
 
     def displaytreetofile(self):
         fd = open('files/displaytree', 'w')
-        item = """
-          +---+
-          |   |
-        +---+---+
-        |   |   |
-        +---+---+
-        |   |   |
-        +---+---+
-        """
-        for node in sorted(self.tree.keys()):
-            fstr = node[2] * '.' + str(node) + ' - ' + self.tree[node] + '\n'
-            fd.write(fstr)
-        fd.write(item)
+        nodeitem = []
+        nodeitem.append("    |\n")
+        nodeitem.append("  +---+\n")
+        nodeitem.append("  |   |\n")
+        nodeitem.append("+---+---+\n")
+        nodeitem.append("|   |   |\n")
+        nodeitem.append("+---+---+\n")
+        nodeitem.append("|   |   |\n")
+        nodeitem.append("+---+---+\n")
+
+        for stritem in nodeitem:
+            fd.write(stritem)
+
         fd.close()
+
+
+    # def displaytreetofile(self):
+    #     fd = open('files/displaytree', 'w')
+    #     item = """
+    #       +---+
+    #       |   |
+    #     +---+---+
+    #     |   |   |
+    #     +---+---+
+    #     |   |   |
+    #     +---+---+
+    #     """
+    #     for node in sorted(self.tree.keys()):
+    #         fstr = node[2] * '.' + str(node) + ' - ' + self.tree[node] + '\n'
+    #         fd.write(fstr)
+    #     fd.write(item)
+    #     fd.close()
 
 
 if __name__ == "__main__":
