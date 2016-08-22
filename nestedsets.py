@@ -84,36 +84,7 @@ class NestedSets:
                 fd.write(lin)
 
         fd.close()
-<<<<<<< HEAD
- 
-    def add_node(self, parent):
-        # parent = (rk, lk, level, id)
-        # Обновляем ключи узлов, стоящих за родительским узлом
-        # UPDATE my_tree SET left_key = left_key + 2, right_ key = right_ key + 2 WHERE left_key > $right_ key
-        # создаем временную копию дерева, т.к. при перепысывании ключей они повторно
-        # могут попасть в цикл
-        tmp_tree = self.tree
-        # обходим основное дерево, и там где необходимо поменять ключи, меняем их в
-        # копии дерева
-        for key in self.tree.keys():
-            if key[1] > parent[0]:
-                # сохраняем ключ и значение во временных переменных
-                tmp_key = key
-                tmp_val = self.tree[key]
-                # удалаем элемент с текущим ключем из обоих деревьев
-                pass
-                # рассчитываем новые ключи
-                tmp_key[1] = tmp_key[1] + 2
-                tmp_key[0] = tmp_key[0] + 2
-                # воссоздаем узел с обновленными ключами в копии дерева
-                tmp_tree[tmp_key] = tmp_val
-        # обновляем основное дерево
-        self.tree = tmp_tree
-        
-        # Обновляем родительскую ветку
-        # UPDATE my_tree SET right_key = right_key + 2 WHERE right_key >= $right_key AND left_key < $right_key
-        # Добавляемновый узел
-=======
+
 
     def add_node(self, parent, val):
         # parent = (rk, lk, level, id)
@@ -149,7 +120,7 @@ class NestedSets:
             if key[3] >= next_id:
                 next_id = key[3] + 1
         # Добавляем новый узел
->>>>>>> 3d331f47d53fdf767abd8847ffbc3a4c5caeb5c8
+
         # INSERT INTO my_tree SET left_key = $right_key, right_key = $right_key + 1, level = $level + 1
         add_lk = parent[0]
         add_rk = parent[0] + 1
