@@ -1,15 +1,18 @@
 # -*-  coding: utf-8 -*-
 import re
+import time
+import logging
 
 
 class NestedSets:
-    def __init__(self):
+    def __init__(self, logs):
         self.id = 0
         self.level = 0
         self.rk = 0
         self.lk = 0
         self.ref = ''
         self.tree = {}
+        logging.basicConfig(filename=logs)
 
     def readtesttree(self):
         # Ключ в словарь записывается так - (rk, lk, level, id)
@@ -82,9 +85,7 @@ class NestedSets:
         for key in levellines.keys():
             for lin in levellines[key]:
                 fd.write(lin)
-
         fd.close()
-
 
     def add_node(self, parent, val):
         # parent = (rk, lk, level, id)
@@ -139,23 +140,24 @@ class NestedSets:
     def del_node(self, nid):
         pass
 
+    @property
     def test_tree(self):
         # Проверка целостности дерева
+        error = []  # список с ошибками
         # 1. Левый ключ ВСЕГДА меньше правого;
-        error_1 = []  # список с ошибками
         # 2. Наименьший левый ключ ВСЕГДА равен 1;
         # 3. Наибольший правый ключ ВСЕГДА равен двойному числу узлов;
         # 4. Разница между правым и левым ключом ВСЕГДА нечетное число;
-        error_2 = []
         # 5. Если уровень узла нечетное число то тогда левый ключ ВСЕГДА нечетное число, то же самое и для четных чисел;
-        error_3 = []
         # 6. Ключи ВСЕГДА уникальны, вне зависимости от того правый он или левый;
         min_lk = 2
         max_rk = 0
+        list_lk = []
+        list_rk = []
         for (num_item, key) in enumerate(self.tree.keys()):
             # 1. Левый ключ ВСЕГДА меньше правого;
             if key[1] >= key[0]:
-                error_1.append(key[3] + ' - ' + self.tree[key])
+                error.append('ERROR_1:' + str(key[3]) + ' - ' + self.tree[key])
             # вычисляем наименьший левый и наибольший правый ключи
             if key[1] < min_lk:
                 min_lk = key[1]
@@ -163,23 +165,38 @@ class NestedSets:
                 max_rk = key[0]
             # 4. Разница между правым и левым ключом ВСЕГДА нечетное число;
             if (key[0] - key[1]) % 2 == 0:
-                error_2.append(key[3] + ' - ' + self.tree[key])
+                error.append('ERROR_4:' + str(key[3]) + ' - ' + self.tree[key])
             # 5. Если уровень узла нечетное число то тогда левый ключ ВСЕГДА нечетное число,
             if (key[2] % 2 != 0) and (key[1] % 2 == 0):
-                error_3.append(key[3] + ' - ' + 'узел и ключ ошибка на нечетность')
+                error.append('ERROR_5:' + str(key[3]) + ' - ' + 'узел и ключ ошибка на нечетность')
             # то же самое и для четных чисел;
             if (key[2] % 2 == 0) and (key[1] % 2 != 0):
-                error_3.append(key[3] + ' - ' + 'узел и ключ ошибка на четность')
-            # TODO: дописать проверку на уникальность
-        # TODO: дописать проверку п. 2 и п. 3 с использованием min_lk и max_rk, а также пустоты списков error
+                error.append('ERROR_5:' + str(key[3]) + ' - ' + 'узел и ключ ошибка на четность')
+            if list_lk.count(key[1]) == 0 and list_rk.count(key[0]) == 0:
+                list_lk.append(key[1])
+                list_rk.append(key[0])
+            else:
+                error.append('ERROR_6:' + str(key[3]) + ' - ошибка уникальности ключей')
+        if min_lk != 1:
+            error.append('ERROR_2:' + 'Наименьший левый ключ не равен 1')
+        if max_rk != 2 * (num_item + 1):
+            error.append('ERROR_3:' + 'Наибольший правый ключ не равен двойному числу узлов')
+        if len(error) != 0:
+            for err in error:
+                logging.error(err)
+            return False
+        else:
+            return True
+
 
 if __name__ == "__main__":
-    ns = NestedSets()
+    logfile = 'files/logs'
+    ns = NestedSets(logfile)
     ns.readtesttree()
     ns.displaytreetofile()
     key_parent = (5, 2, 2, 2)
-    ns.add_node(key_parent, 'node005')
+    # ns.add_node(key_parent, 'node005')
     print('---------------------------------------')
     key_parent = (9, 8, 2, 3)
-    ns.add_node(key_parent, 'node006')
-    ns.test_tree()
+    # ns.add_node(key_parent, 'node006')
+    ns.test_tree
