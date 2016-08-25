@@ -4,10 +4,6 @@ import time
 import logging
 import logging.config
 
-logging.config.fileConfig('configs/logging_test.conf')
-
-# создаём logger
-logger = logging.getLogger('simpleExample')
 
 logger = logging.getLogger(__name__)
 
