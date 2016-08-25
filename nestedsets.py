@@ -9,6 +9,8 @@ logging.config.fileConfig('configs/logging_test.conf')
 # создаём logger
 logger = logging.getLogger('simpleExample')
 
+logger = logging.getLogger(__name__)
+
 
 class NestedSets:
     def __init__(self, logs):
@@ -163,7 +165,7 @@ class NestedSets:
         for (num_item, key) in enumerate(self.tree.keys()):
             # 1. Левый ключ ВСЕГДА меньше правого;
             if key[1] >= key[0]:
-                error.append('ERROR_1:' + str(key[3]) + ' - ' + self.tree[key])
+                error.append(' TEST-TREE_1: ' + str(key[3]) + ' - ' + self.tree[key])
             # вычисляем наименьший левый и наибольший правый ключи
             if key[1] < min_lk:
                 min_lk = key[1]
@@ -171,22 +173,22 @@ class NestedSets:
                 max_rk = key[0]
             # 4. Разница между правым и левым ключом ВСЕГДА нечетное число;
             if (key[0] - key[1]) % 2 == 0:
-                error.append('ERROR_4:' + str(key[3]) + ' - ' + self.tree[key])
+                error.append(' TEST-TREE_4: ' + str(key[3]) + ' - ' + self.tree[key])
             # 5. Если уровень узла нечетное число то тогда левый ключ ВСЕГДА нечетное число,
             if (key[2] % 2 != 0) and (key[1] % 2 == 0):
-                error.append('ERROR_5:' + str(key[3]) + ' - ' + 'узел и ключ ошибка на нечетность')
+                error.append(' TEST-TREE_5: ' + str(key[3]) + ' - ' + 'узел и ключ ошибка на нечетность')
             # то же самое и для четных чисел;
             if (key[2] % 2 == 0) and (key[1] % 2 != 0):
-                error.append('ERROR_5:' + str(key[3]) + ' - ' + 'узел и ключ ошибка на четность')
+                error.append(' TEST-TREE_5: ' + str(key[3]) + ' - ' + 'узел и ключ ошибка на четность')
             if list_lk.count(key[1]) == 0 and list_rk.count(key[0]) == 0:
                 list_lk.append(key[1])
                 list_rk.append(key[0])
             else:
-                error.append('ERROR_6:' + str(key[3]) + ' - ошибка уникальности ключей')
+                error.append(' TEST-TREE_6: ' + str(key[3]) + ' - ошибка уникальности ключей')
         if min_lk != 1:
-            error.append('ERROR_2:' + 'Наименьший левый ключ не равен 1')
+            error.append(' TEST-TREE_2: ' + 'Наименьший левый ключ не равен 1')
         if max_rk != 2 * (num_item + 1):
-            error.append('ERROR_3:' + 'Наибольший правый ключ не равен двойному числу узлов')
+            error.append(' TEST-TREE_3: ' + 'Наибольший правый ключ не равен двойному числу узлов')
         if len(error) != 0:
             for err in error:
                 logger.error(err)
