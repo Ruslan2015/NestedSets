@@ -2,6 +2,12 @@
 import re
 import time
 import logging
+import logging.config
+
+logging.config.fileConfig('configs/logging_test.conf')
+
+# создаём logger
+logger = logging.getLogger('simpleExample')
 
 
 class NestedSets:
@@ -183,7 +189,7 @@ class NestedSets:
             error.append('ERROR_3:' + 'Наибольший правый ключ не равен двойному числу узлов')
         if len(error) != 0:
             for err in error:
-                logging.error(err)
+                logger.error(err)
             return False
         else:
             return True
